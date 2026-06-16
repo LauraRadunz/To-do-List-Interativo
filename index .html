@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To do list</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Minha Lista</h1>
+      <p class="subtitle">Organize seu dia com clareza</p>
+    </header>
+
+    <div class="input-area">
+      <input
+        type="text"
+        id="taskInput"
+        placeholder="Nova tarefa..."
+        autocomplete="off"
+      />
+      <button id="addBtn">Adicionar</button>
+    </div>
+
+    <div class="counter-bar">
+      <span id="counter">0 tarefa(s) pendente(s)</span>
+    </div>
+
+    <ul id="taskList"></ul>
+
+    <p class="empty-msg" id="emptyMsg">Nenhuma tarefa ainda. Adicione uma acima!</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
