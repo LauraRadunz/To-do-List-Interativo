@@ -1,194 +1,66 @@
-/* === Paleta Vinho ===
-  --wine-dark:   #4A0E1A  (fundo escuro)
-  --wine:        #7B1D2E  (vinho principal)
-  --wine-mid:    #A52840  (acento)
-  --wine-light:  #D4596E  (hover / detalhe)
-  --cream:       #FAF3F0  (texto claro / fundo card)
-  --blush:       #F2DDE1  (fundo input)
-*/
-
+/* Definição de variáveis de estilo para manter a consistência visual */
 *, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  box-sizing: border-box; /* Garante que padding não altere o tamanho do elemento */
+  margin: 0; padding: 0;
 }
 
 body {
-  min-height: 100vh;
-  background-color: #4A0E1A;
+  min-height: 100vh; /* Altura mínima da tela cheia */
+  background-color: #4A0E1A; /* Fundo escuro base */
+  /* Gradiente radial para um efeito visual de profundidade */
   background-image: radial-gradient(ellipse at top, #7B1D2E 0%, #4A0E1A 70%);
-  display: flex;
-  align-items: flex-start;
+  display: flex; /* Centraliza o conteúdo */
   justify-content: center;
   padding: 48px 16px;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   color: #FAF3F0;
 }
 
-.container {
-  width: 100%;
-  max-width: 520px;
-}
+.container { width: 100%; max-width: 520px; }
 
-/* --- Cabeçalho --- */
-header {
-  text-align: center;
-  margin-bottom: 32px;
-}
+/* Estilização do cabeçalho */
+header { text-align: center; margin-bottom: 32px; }
+h1 { font-size: 2.4rem; font-weight: 700; color: #FAF3F0; }
+.subtitle { font-size: 0.9rem; color: #D4596E; text-transform: uppercase; }
 
-h1 {
-  font-size: 2.4rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: #FAF3F0;
-}
-
-.subtitle {
-  font-size: 0.9rem;
-  color: #D4596E;
-  margin-top: 4px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-/* --- Área de input --- */
-.input-area {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
+/* Estilo do Input e Botão */
+.input-area { display: flex; gap: 10px; margin-bottom: 16px; }
 #taskInput {
-  flex: 1;
-  padding: 12px 16px;
-  border: 2px solid #A52840;
-  border-radius: 8px;
-  background-color: #F2DDE1;
-  color: #4A0E1A;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
+  flex: 1; padding: 12px 16px; border: 2px solid #A52840;
+  border-radius: 8px; background-color: #F2DDE1; color: #4A0E1A;
+  outline: none; transition: border-color 0.2s;
 }
-
-#taskInput::placeholder {
-  color: #A52840;
-  opacity: 0.7;
-}
-
-#taskInput:focus {
-  border-color: #D4596E;
-}
+#taskInput:focus { border-color: #D4596E; } /* Destaque ao clicar */
 
 #addBtn {
-  padding: 12px 20px;
-  background-color: #A52840;
-  color: #FAF3F0;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
-  white-space: nowrap;
+  padding: 12px 20px; background-color: #A52840; color: #FAF3F0;
+  border: none; border-radius: 8px; cursor: pointer; transition: 0.2s;
 }
+#addBtn:hover { background-color: #D4596E; } /* Efeito ao passar o mouse */
 
-#addBtn:hover {
-  background-color: #D4596E;
-}
-
-#addBtn:active {
-  transform: scale(0.97);
-}
-
-/* --- Contador --- */
-.counter-bar {
-  margin-bottom: 20px;
-  font-size: 0.82rem;
-  color: #D4596E;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-/* --- Lista --- */
-#taskList {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
+/* Estilo da lista */
+#taskList { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 #taskList li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: rgba(250, 243, 240, 0.06);
-  border: 1px solid rgba(212, 89, 110, 0.25);
-  border-radius: 8px;
-  padding: 14px 16px;
-  transition: background-color 0.2s;
+  display: flex; align-items: center; gap: 12px;
+  background-color: rgba(250, 243, 240, 0.06); /* Fundo levemente transparente */
+  border: 1px solid rgba(212, 89, 110, 0.25); border-radius: 8px; padding: 14px 16px;
 }
 
-#taskList li:hover {
-  background-color: rgba(250, 243, 240, 0.1);
-}
-
-.task-text {
-  flex: 1;
-  font-size: 1rem;
-  color: #FAF3F0;
-  cursor: pointer;
-  transition: color 0.2s, text-decoration 0.2s;
-}
-
-.task-text:hover {
-  color: #D4596E;
-}
-
-/* Tarefa concluída */
+/* Efeito visual de tarefa concluída */
 li.completed .task-text {
-  text-decoration: line-through;
-  color: #D4596E;
-  opacity: 0.6;
+  text-decoration: line-through; /* Risco no texto */
+  color: #D4596E; opacity: 0.6;
 }
 
-/* Botão excluir */
+/* Botão de deletar */
 .delete-btn {
-  background: none;
-  border: 1px solid rgba(212, 89, 110, 0.4);
-  color: #D4596E;
-  border-radius: 6px;
-  padding: 4px 10px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-  flex-shrink: 0;
+  background: none; border: 1px solid rgba(212, 89, 110, 0.4);
+  color: #D4596E; border-radius: 6px; padding: 4px 10px; cursor: pointer;
 }
+.delete-btn:hover { background-color: #A52840; color: #FAF3F0; }
 
-.delete-btn:hover {
-  background-color: #A52840;
-  color: #FAF3F0;
-  border-color: #A52840;
-}
+/* Ocultar elemento de mensagem vazia */
+.empty-msg.hidden { display: none; }
 
-/* --- Mensagem vazia --- */
-.empty-msg {
-  text-align: center;
-  color: rgba(212, 89, 110, 0.5);
-  font-size: 0.9rem;
-  margin-top: 32px;
-  font-style: italic;
-}
-
-.empty-msg.hidden {
-  display: none;
-}
-
-/* --- Responsividade --- */
-@media (max-width: 400px) {
-  h1 { font-size: 1.8rem; }
-  #addBtn { padding: 12px 14px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
-}
+/* Responsividade para telas menores */
+@media (max-width: 400px) { h1 { font-size: 1.8rem; } }

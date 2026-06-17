@@ -1,98 +1,107 @@
-// === Captura dos elementos ===
-const taskInput = document.getElementById('taskInput');
-const addBtn    = document.getElementById('addBtn');
-const taskList  = document.getElementById('taskList');
-const counter   = document.getElementById('counter');
-const emptyMsg  = document.getElementById('emptyMsg');
+// === Captura dos elementos do DOM ===
+// Seleciona os elementos da página para interagir com o usuário
+const campoTarefa   = document.getElementById('taskInput');
+const botaoAdicionar = document.getElementById('addBtn');
+const listaTarefas  = document.getElementById('taskList');
+const contador      = document.getElementById('counter');
+const msgVazia      = document.getElementById('emptyMsg');
 
-// === Carrega tarefas salvas no localStorage ===
-let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+// === Inicialização de Dados ===
+// Carrega as tarefas salvas. Se não houver nada, começa com uma lista vazia.
+let minhasTarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
 
-// Renderiza as tarefas salvas ao iniciar a página
-tasks.forEach(task => renderTask(task));
-updateUI();
+// Renderiza na tela as tarefas que já estavam salvas
+minhasTarefas.forEach(tarefa => renderizarTarefa(tarefa));
+atualizarInterface(); 
 
-// === Eventos ===
-addBtn.addEventListener('click', addTask);
+// === Configuração de Eventos ===
+// Adiciona ação ao clique do botão
+botaoAdicionar.addEventListener('click', adicionarTarefa);
 
-taskInput.addEventListener('keydown', function (e) {
-  if (e.key === 'Enter') addTask();
+// Adiciona ação ao pressionar a tecla "Enter" no campo de texto
+campoTarefa.addEventListener('keydown', function (evento) {
+  if (evento.key === 'Enter') adicionarTarefa();
 });
 
-// === Funções ===
+// === Funções Principais ===
 
-function addTask() {
-  const text = taskInput.value.trim();
+function adicionarTarefa() {
+  const texto = campoTarefa.value.trim(); // Remove espaços extras
 
-  // Validação: impede tarefa vazia
-  if (!text) {
-    taskInput.focus();
-    taskInput.style.borderColor = '#D4596E';
-    setTimeout(() => { taskInput.style.borderColor = ''; }, 800);
+  // Validação: se o texto estiver vazio, destaca o campo e para a execução
+  if (!texto) {
+    campoTarefa.focus();
+    campoTarefa.style.borderColor = '#D4596E';
+    setTimeout(() => { campoTarefa.style.borderColor = ''; }, 800);
     return;
   }
 
-  const task = { id: Date.now(), text, completed: false };
-  tasks.push(task);
-  saveTasks();
-  renderTask(task);
+  // Cria o objeto da nova tarefa
+  const novaTarefa = { id: Date.now(), texto: texto, concluida: false };
+  
+  minhasTarefas.push(novaTarefa); // Adiciona ao array principal
+  salvarNoLocalStorage();         // Salva no banco do navegador
+  renderizarTarefa(novaTarefa);   // Exibe na tela
 
-  // Limpa o input após adicionar
-  taskInput.value = '';
-  taskInput.focus();
-
-  updateUI();
+  campoTarefa.value = ''; // Limpa o campo
+  campoTarefa.focus();    // Foca de volta para facilitar nova digitação
+  atualizarInterface();   // Atualiza contador e avisos
 }
 
-function renderTask(task) {
-  const li = document.createElement('li');
-  li.dataset.id = task.id;
-  if (task.completed) li.classList.add('completed');
+function renderizarTarefa(tarefa) {
+  const itemLista = document.createElement('li'); // Cria o <li>
+  itemLista.dataset.id = tarefa.id;              // Define o ID único
+  if (tarefa.concluida) itemLista.classList.add('completed');
 
-  // Texto clicável (marcar como concluída)
-  const span = document.createElement('span');
-  span.classList.add('task-text');
-  span.textContent = task.text;
-  span.addEventListener('click', () => toggleTask(task.id, li));
+  const spanTexto = document.createElement('span'); // Cria o texto da tarefa
+  spanTexto.classList.add('task-text');
+  spanTexto.textContent = tarefa.texto;
+  // Ao clicar no texto, altera o estado entre concluído/pendente
+  spanTexto.addEventListener('click', () => alternarStatus(tarefa.id, itemLista));
 
-  // Botão excluir
-  const deleteBtn = document.createElement('button');
-  deleteBtn.classList.add('delete-btn');
-  deleteBtn.textContent = 'Excluir';
-  deleteBtn.addEventListener('click', () => removeTask(task.id, li));
+  const botaoExcluir = document.createElement('button'); // Cria botão excluir
+  botaoExcluir.classList.add('delete-btn');
+  botaoExcluir.textContent = 'Excluir';
+  // Ao clicar no botão, remove a tarefa
+  botaoExcluir.addEventListener('click', () => removerTarefa(tarefa.id, itemLista));
 
-  li.appendChild(span);
-  li.appendChild(deleteBtn);
-  taskList.appendChild(li);
+  itemLista.appendChild(spanTexto);
+  itemLista.appendChild(botaoExcluir);
+  listaTarefas.appendChild(itemLista);
 }
 
-function toggleTask(id, li) {
-  const task = tasks.find(t => t.id === id);
-  if (!task) return;
-  task.completed = !task.completed;
-  li.classList.toggle('completed');
-  saveTasks();
-  updateUI();
+function alternarStatus(id, itemLista) {
+  const tarefa = minhasTarefas.find(t => t.id === id); // Localiza a tarefa
+  if (!tarefa) return;
+  
+  tarefa.concluida = !tarefa.concluida; // Inverte o status
+  itemLista.classList.toggle('completed'); // Alterna o estilo CSS
+  salvarNoLocalStorage();
+  atualizarInterface();
 }
 
-function removeTask(id, li) {
-  tasks = tasks.filter(t => t.id !== id);
-  saveTasks();
-  li.remove();
-  updateUI();
+function removerTarefa(id, itemLista) {
+  // Remove do array usando filter (mantém todos, menos o que tem o ID clicado)
+  minhasTarefas = minhasTarefas.filter(t => t.id !== id);
+  salvarNoLocalStorage();
+  itemLista.remove(); // Remove da tela
+  atualizarInterface();
 }
 
-function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
+function salvarNoLocalStorage() {
+  // Converte o array para formato texto (JSON) e guarda no navegador
+  localStorage.setItem('tarefas', JSON.stringify(minhasTarefas));
 }
 
-function updateUI() {
-  const pending = tasks.filter(t => !t.completed).length;
-  counter.textContent = `${pending} tarefa(s) pendente(s)`;
+function atualizarInterface() {
+  // Conta apenas as que estão pendentes
+  const pendentes = minhasTarefas.filter(t => !t.concluida).length;
+  contador.textContent = `${pendentes} tarefa(s) pendente(s)`;
 
-  if (tasks.length === 0) {
-    emptyMsg.classList.remove('hidden');
+  // Mostra ou esconde a mensagem de lista vazia
+  if (minhasTarefas.length === 0) {
+    msgVazia.classList.remove('hidden');
   } else {
-    emptyMsg.classList.add('hidden');
+    msgVazia.classList.add('hidden');
   }
 }
